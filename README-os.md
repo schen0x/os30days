@@ -1,0 +1,61 @@
+# OS30DAYS
+
+## TABLE OF CONTENT
+
+
+## DAY1 A BOOTABLE IMAGE
+
+![d01-os-hello_world](./img/d01-os-hello_world.png)
+
+- Edit raw img
+
+```sh
+# The first bootable image, 1440KB FDA, FAT12
+dd if=/dev/zero of=os.img bs=1024 count=1440
+sudo mkfs -t fat os.img
+# Then modified the bytes. (with VIM XXD)
+```
+
+- NASM to img
+
+```sh
+nasm os.nas -o os.img
+```
+
+- asm with Data Byte
+
+```asm
+DB 0xeb, 0x4e, 0x90, 0x48, 0x45, 0x4c, 0x4c, 0x4f
+; ...
+RESB 1469432
+```
+### BOOT SECTOR OF FAT
+
+- [Boot Sector of FAT](https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system#Boot_Sector)
+- [Volume Boot Record](https://en.wikipedia.org/wiki/Volume_boot_record)
+
+- We essentially wrote an Boot Sector of MBR?
+- WHAT IS `0xeb, 0x4e, 0x90`? It is A JUMP INSTRUCTION. `JMP 0x4e; NOP;` When an address is dectected during boot, chain access will start, execution will be passed to this command. This instruction will then skip over the non-executable of the sector.
+- WHAT IS `0x55, 0xaa`? It is a "boot sector signature" (see VBR). Also, 0x1fe+2 == 0x200 == 512 Byte, the end of the sector.
+
+
+### CUSTOM BOOT SECTOR
+
+- [d01-custom_os](./d01/custom_os.asm)
+
+
+## QEMU
+
+```sh
+# to boot from a raw img
+qemu-system-x86_64 -drive file=helloos.img,format=raw
+```
+
+## PATCH BINARY WITH VIM
+
+```sh
+nvim example.bin
+:%!xxd # display as mail safe hex dump
+:%!xxd -r # to revert a mail safe hex dump to binary
+```
+
