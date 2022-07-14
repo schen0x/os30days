@@ -33,10 +33,14 @@ RESB 1469432
 
 - [Boot Sector of FAT](https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system#Boot_Sector)
 - [Volume Boot Record](https://en.wikipedia.org/wiki/Volume_boot_record)
+- [DOS 4.0 EBPB](https://en.wikipedia.org/wiki/BIOS_parameter_block)
+- [Local Block Addressing (LBA)](https://en.wikipedia.org/wiki/Logical_block_addressing)
 
 - We essentially wrote an Boot Sector of MBR?
 - WHAT IS `0xeb, 0x4e, 0x90`? It is A JUMP INSTRUCTION. `JMP 0x4e; NOP;` When an address is dectected during boot, chain access will start, execution will be passed to this command. This instruction will then skip over the non-executable of the sector.
 - WHAT IS `0x55, 0xaa`? It is a "boot sector signature" (see VBR). Also, 0x1fe+2 == 0x200 == 512 Byte, the end of the sector.
+
+- the BIOS Parameter Block (BPB) used in the book is the DOS 4.0 EBPB for FAT12, FAT16, FAT16B and HPFS (51bytes).
 
 
 ### CUSTOM BOOT SECTOR
